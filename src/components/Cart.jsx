@@ -1,11 +1,11 @@
-import { Button } from "bootstrap";
+import { Button } from "react";
 import { useContext } from "react";
 import { CardBody, CardGroup, Card, CardImg, CardTitle,CardSubtitle, CardText, } from "reactstrap";
 import { CartContext } from "./CartContext";
 
-const Cart = () => {
+const Cart = ({ item }) => {
     const test = useContext(CartContext);
-    console.log(test.cartList)
+    // console.log(test.cartList)
     return (
        <>
             <CardTitle> YOUR CART</CardTitle>
@@ -14,18 +14,18 @@ const Cart = () => {
                 test.cartList.length > 0 && (
                     <CardGroup>
                         {
-                            test.cartList.map(item =>
-                                <Card>
+                            test.cartList.map (item => 
+                                <Card >
                                     <CardImg
                                     alt="Card image cap"
-                                    src= {item.image[0]}
+                                    src= {item.img}
                                     top
                                     width="100%"
                                     />
         
                                     <CardBody>
                                         <CardTitle tag="h5">
-                                            Product {item.name[0]}
+                                            Product:  {item.nombre}
                                         </CardTitle>
                                         <CardSubtitle
                                             className="mb-2 text-muted"
@@ -34,14 +34,20 @@ const Cart = () => {
                                             2 items
                                         </CardSubtitle>
                                         <CardText>
-                                            $ {item.precio} each
+                                            $ {item.precio} por unidad
+                                        </CardText>
+                                        <CardText>
+                                        <button onClick={test.decrement} > descartar un producto </button>
                                         </CardText>
                                     </CardBody>
-                                </Card> 
-        
-                            )     
+                                </Card>, 
+                                console.log(item)
+                            
+                            )    
+                             
+                            
                         }
-                       <button onClick={test.decrement} className='buttons-counters'> descartar un producto </button>
+                     
                     </CardGroup>
                 )
             }

@@ -27,7 +27,7 @@ const ItemListContainer= () => {
   }, [idCategory])
   
   function onAdd (qty) {
-    alert(`se agregó ${qty} productos`)
+    alert(`se agregó ' ' ${qty} productos`)
   }
 
   return (
