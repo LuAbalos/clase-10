@@ -5,7 +5,7 @@ import { CartContext } from "./CartContext";
 
 const Cart = ({ item }) => {
     const test = useContext(CartContext);
-    // console.log(test.cartList)
+     console.log(test.cartList)
     return (
        <>
             <CardTitle> YOUR CART</CardTitle>
@@ -18,30 +18,30 @@ const Cart = ({ item }) => {
                                 <Card >
                                     <CardImg
                                     alt="Card image cap"
-                                    src= {item.img}
+                                    src= {item.imgItem}
                                     top
                                     width="100%"
                                     />
         
                                     <CardBody>
                                         <CardTitle tag="h5">
-                                            Product:  {item.nombre}
+                                            Product:  {item.nameItem}
                                         </CardTitle>
                                         <CardSubtitle
                                             className="mb-2 text-muted"
                                             tag="h6"
                                         >
-                                            2 items
+                                            {item.idItem} items
                                         </CardSubtitle>
                                         <CardText>
-                                            $ {item.precio} por unidad
+                                            {item.precioItem} por unidad
                                         </CardText>
                                         <CardText>
-                                        <button onClick={test.decrement} > descartar un producto </button>
+                                        <button onClick={() => test.removeItem(item.idItem)} > descartar un producto </button>
                                         </CardText>
                                     </CardBody>
                                 </Card>, 
-                                console.log(item)
+                
                             
                             )    
                              
