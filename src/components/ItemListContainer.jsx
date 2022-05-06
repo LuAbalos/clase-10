@@ -8,13 +8,12 @@ import { useParams } from "react-router-dom";
 
 
 const ItemListContainer= () => {
-
   const [dato, setDato] = useState ([]);
   const { idCategory } = useParams ();
 
   useEffect(() =>{
     if (idCategory == undefined){
-      customFetch(2000, products)
+      customFetch(500, products)
         .then((result) => setDato(result))
         .catch((err) => console.log(err));  
 

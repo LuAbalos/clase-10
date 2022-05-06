@@ -6,11 +6,10 @@ import { useContext } from 'react';
 
 export const CartContext = createContext();
 
-const CartContextProvider = ({children}) => {
+const CartContextProvider = ({ children }) => {
     const [cartList, setCartList] = useState([])
 
     const addToCart = (item, qty) => {
-        console.log("item antes de agregar", item)
 
         let found = cartList.find(product => product.idItem === item.id);
 
@@ -42,9 +41,18 @@ const CartContextProvider = ({children}) => {
     }
     
 
-    const calcTotalPorItem = (idItem) => {
+    const calcTotalPerItem = (idItem) => {
         let index = cartList.map( item => item.idItem).indexOf(idItem);
         return cartList[index].costItem * cartList[index].qtyItem;
+    }
+    const calcSubTotal = () => {
+        let totalPerItem = cartList.map(item => calcTotalPerItem(item.idItem));
+        return totalPerItem.reduce((previousValue, currentValue) => previousValue + currentValue);
+    }
+
+
+    const calcTotal = () => {
+        return calcSubTotal();
     }
 
     const calcItemsQty = () => {
@@ -60,8 +68,11 @@ const CartContextProvider = ({children}) => {
             addToCart, 
             clear, 
             removeItem,
-            calcTotalPorItem,
+            calcTotalPerItem,
+            calcSubTotal,
+            calcTotal,
             calcItemsQty,
+            
             }}>
             {children}
         </CartContext.Provider>

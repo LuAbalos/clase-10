@@ -1,15 +1,22 @@
 import { Button } from "react";
 import { useContext } from "react";
-import { CardBody, CardGroup, Card, CardImg, CardTitle,CardSubtitle, CardText, } from "reactstrap";
+import { Link } from "react-router-dom";
+import { CardBody, CardGroup, Card, CardImg, CardTitle,CardSubtitle, CardText, CardHeader, CardFooter, FormatNumber} from "reactstrap";
 import { CartContext } from "./CartContext";
 
 const Cart = ({ item }) => {
     const test = useContext(CartContext);
-     console.log(test.cartList)
+     
     return (
        <>
-            <CardTitle> YOUR CART</CardTitle>
-            <button onClick={test.clear}>Eliminar Todos</button>
+            <CardTitle> Tu carrito</CardTitle>
+            <Link to='/'> Continuar comprando</Link>
+            {
+                (test.cartList.length > 0)
+                ? <button onClick={test.clear}>Eliminar Todos</button>
+                : <div>Tu carrito esta vacio</div>
+            }
+
             {
                 test.cartList.length > 0 && (
                     <CardGroup>
@@ -25,7 +32,7 @@ const Cart = ({ item }) => {
         
                                     <CardBody>
                                         <CardTitle tag="h5">
-                                            Product:  {item.nameItem}
+                                            Producto:  {item.nameItem}
                                         </CardTitle>
                                         <CardSubtitle
                                             className="mb-2 text-muted"
@@ -37,20 +44,46 @@ const Cart = ({ item }) => {
                                             {item.precioItem} por unidad
                                         </CardText>
                                         <CardText>
-                                        <button onClick={() => test.removeItem(item.idItem)} > descartar un producto </button>
+                                         {test.calcTotalPerItem(item.idItem)} 
                                         </CardText>
+                                        <CardText>
+                                        <button onClick={() => test.removeItem(item.idItem)} > Descartar un producto </button>
+                                        </CardText>
+                                        
+                                        
                                     </CardBody>
-                                </Card>, 
-                
-                            
-                            )    
-                             
-                            
+                                </Card>   
+                            )   
                         }
-                     
                     </CardGroup>
                 )
             }
+            {/* {
+                test.cartList.length > 0 &&
+                <>
+                    
+                    <Card>
+                        <CardHeader tag="h3">
+                            Resumen de compra
+                        </CardHeader>
+                        <CardBody>
+                            <CardTitle tag="h5">
+                            <div number={test.calcSubTotal()} />
+                            </CardTitle>
+                            <CardText>
+                                Total
+                                <div number={test.calcTotal()}/>
+                            </CardText>
+                            <Button>
+                                Terminar Compra
+                            </Button>
+                        </CardBody>
+                        <CardFooter className="text-muted">
+                            Footer
+                        </CardFooter>
+                    </Card>
+                </>    
+            } */}
         </>
     )
 }
