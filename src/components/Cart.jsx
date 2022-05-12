@@ -1,12 +1,53 @@
-import { Button } from "react";
+
 import { useContext } from "react";
 import { Link } from "react-router-dom";
 import { CardBody, CardGroup, Card, CardImg, CardTitle,CardSubtitle, CardText, CardHeader, CardFooter, FormatNumber} from "reactstrap";
 import { CartContext } from "./CartContext";
 
-const Cart = ({ item }) => {
+import { collection, doc, setDoc, serverTimestamp, updateDoc, increment } from "firebase/firestore";
+import db from "../js-components/firebaseConfig";
+
+const Cart = () => {
     const test = useContext(CartContext);
-     
+     console.log(test)
+    const createOrder = () => {
+        const itemsForDB = test.cartList.map(item => ({
+          id: item.idItem,
+          title: item.nameItem,
+          price: item.precioItem
+        }));
+
+        test.cartList.forEach(async (item) => {
+            const itemRef = doc(db, "products", item.idItem);
+            await updateDoc(itemRef, {
+              stock: increment(-item.qtyItem)
+            });
+        });
+
+        let order = {
+            total: test.calcTotal(),
+            items: itemsForDB,
+            date: serverTimestamp()
+        };
+
+        console.log(order);
+    
+        const createOrderInFirestore = async () => {
+          // Add a new document with a generated id
+          const newOrderRef = doc(collection(db, "orders"));
+          await setDoc(newOrderRef, order);
+          return newOrderRef;
+        }
+      
+        createOrderInFirestore()
+          .then(result => alert('Your order has been created. Please take note of the ID of your order.\n\n\nOrder ID: ' + result.id + '\n\n'))
+          .catch(err => console.log(err));
+      
+        test.removeList();
+      
+      }
+    
+
     return (
        <>
             <CardTitle> Tu carrito</CardTitle>
@@ -41,10 +82,10 @@ const Cart = ({ item }) => {
                                             {item.idItem} items
                                         </CardSubtitle>
                                         <CardText>
-                                            {item.precioItem} por unidad
+                                           $ {item.precioItem} por unidad
                                         </CardText>
                                         <CardText>
-                                         {test.calcTotalPerItem(item.idItem)} 
+                                         $ {item.precioItem * item.qtyItem } en total
                                         </CardText>
                                         <CardText>
                                         <button onClick={() => test.removeItem(item.idItem)} > Descartar un producto </button>
@@ -58,7 +99,7 @@ const Cart = ({ item }) => {
                     </CardGroup>
                 )
             }
-            {/* {
+             { 
                 test.cartList.length > 0 &&
                 <>
                     
@@ -68,22 +109,22 @@ const Cart = ({ item }) => {
                         </CardHeader>
                         <CardBody>
                             <CardTitle tag="h5">
-                            <div number={test.calcSubTotal()} />
+                            <p>$ {test.calcSubTotal()} </p>
                             </CardTitle>
                             <CardText>
                                 Total
-                                <div number={test.calcTotal()}/>
+                                <p>$ {test.calcTotal()} </p>
                             </CardText>
-                            <Button>
+                            <button>
                                 Terminar Compra
-                            </Button>
+                            </button>
                         </CardBody>
                         <CardFooter className="text-muted">
                             Footer
                         </CardFooter>
                     </Card>
                 </>    
-            } */}
+            }  
         </>
     )
 }

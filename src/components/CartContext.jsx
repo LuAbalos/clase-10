@@ -1,8 +1,5 @@
-
 import {createContext, useState} from 'react'
-import Cart from './Cart';
-import Item from './Item';
-import { useContext } from 'react';
+
 
 export const CartContext = createContext();
 
@@ -43,7 +40,7 @@ const CartContextProvider = ({ children }) => {
 
     const calcTotalPerItem = (idItem) => {
         let index = cartList.map( item => item.idItem).indexOf(idItem);
-        return cartList[index].costItem * cartList[index].qtyItem;
+        return cartList[index].precioItem * cartList[index].qtyItem;
     }
     const calcSubTotal = () => {
         let totalPerItem = cartList.map(item => calcTotalPerItem(item.idItem));

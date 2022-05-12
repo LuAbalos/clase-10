@@ -25,7 +25,7 @@ export default function Item ({id, nombre, descripcion, precio, img, category}) 
                         {descripcion}
                     </CardSubtitle>
                     <CardText>
-                        {precio}
+                        $ {precio}
                     </CardText>
                     <CardText>
                         {category}

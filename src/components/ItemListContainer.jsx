@@ -1,33 +1,33 @@
 import React, { useEffect, useState } from "react";
-import ItemCount from "./ItemCount";
-import { getData } from "../js-components/products";
 import ItemList from './ItemList'
 import customFetch from "../js-components/customFetch"
-import {products} from '../js-components/products'
 import { useParams } from "react-router-dom";
-
+import { collection, getDocs } from "firebase/firestore";
+import db from "../js-components/firebaseConfig";
 
 const ItemListContainer= () => {
   const [dato, setDato] = useState ([]);
   const { idCategory } = useParams ();
 
   useEffect(() =>{
-    if (idCategory == undefined){
-      customFetch(500, products)
-        .then((result) => setDato(result))
-        .catch((err) => console.log(err));  
-
-    } else {
-      customFetch(2000, products.filter(item => item.categoryId === parseInt(idCategory)))
-        .then((result) => setDato(result))
-        .catch((err) => console.log(err)); 
+    const fetchFromFirestore = async () => {
+      const querySnapshot = await getDocs(collection(db, "products"));
+      const dataFromFirestore = querySnapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data()
+      }));
+      return dataFromFirestore;
     }
-    
-  }, [idCategory])
+    fetchFromFirestore()
+      .then(result => setDato(result))
+      .catch(err => console.log (err));
+  }, [dato]);
   
-  function onAdd (qty) {
-    alert(`se agregó ' ' ${qty} productos`)
-  }
+  useEffect (() => {
+    return (() => {
+      setDato([]);
+    })
+  }, []);
 
   return (
     <>
@@ -38,3 +38,6 @@ const ItemListContainer= () => {
   
 export default ItemListContainer;
 
+// function onAdd (qty) {
+//   alert(`se agregó ' ' ${qty} productos`)
+// }
