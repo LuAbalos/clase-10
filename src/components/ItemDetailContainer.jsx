@@ -5,7 +5,7 @@ import { firestoreFetchOne } from "../js-components/firestoreFetch";
 
 const ItemDetailContainer = () => {
     const [dato, setDato] = useState ({});
-    const {idItem} = useParams();
+    const { idItem } = useParams();
 
      useEffect (() => {
       firestoreFetchOne(idItem)

@@ -3,18 +3,19 @@ import { useContext } from "react";
 import { Link } from "react-router-dom";
 import { CardBody, CardGroup, Card, CardImg, CardTitle,CardSubtitle, CardText, CardHeader, CardFooter, FormatNumber} from "reactstrap";
 import { CartContext } from "./CartContext";
-
 import { collection, doc, setDoc, serverTimestamp, updateDoc, increment } from "firebase/firestore";
 import db from "../js-components/firebaseConfig";
 
+
 const Cart = () => {
     const test = useContext(CartContext);
-     console.log(test)
+
     const createOrder = () => {
         const itemsForDB = test.cartList.map(item => ({
           id: item.idItem,
           title: item.nameItem,
-          price: item.precioItem
+          price: item.precioItem,
+          qty: item.qtyItem,
         }));
 
         test.cartList.forEach(async (item) => {
@@ -25,10 +26,15 @@ const Cart = () => {
         });
 
         let order = {
+            buyer: {
+              name: "Cristiano Ronaldo",
+              email: "suui@ronaldo.com",
+              phone: "123456789"
+            },
             total: test.calcTotal(),
             items: itemsForDB,
             date: serverTimestamp()
-        };
+          };
 
         console.log(order);
     
@@ -42,8 +48,10 @@ const Cart = () => {
         createOrderInFirestore()
           .then(result => alert('Your order has been created. Please take note of the ID of your order.\n\n\nOrder ID: ' + result.id + '\n\n'))
           .catch(err => console.log(err));
-      
-        test.removeList();
+        return(
+            test.setCartList([])
+        )
+        
       
       }
     
@@ -115,7 +123,7 @@ const Cart = () => {
                                 Total
                                 <p>$ {test.calcTotal()} </p>
                             </CardText>
-                            <button>
+                            <button onClick={createOrder}>
                                 Terminar Compra
                             </button>
                         </CardBody>
