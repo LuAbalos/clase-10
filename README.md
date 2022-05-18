@@ -41,7 +41,7 @@ Eres libre de analizar/estudiar/forkear/copiar/mejorar este proyecto. Se agradec
 * Da las gracias públicamente 🤓.
 
 
-## Gift (entrar al link)
+## Gif
 https://user-images.githubusercontent.com/94176256/168956197-dd0b02c9-fa3f-4994-a319-1f6335a63af5.mp4
 
 
